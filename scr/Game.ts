@@ -97,6 +97,7 @@ let isSwordFound: boolean = false;
 let isGameOver: boolean = false;
 let monsterKilled: boolean = false;
 let doorOpened: boolean = false;
+let doorDiscovered: boolean = false;
 
 let upPressed: boolean = false;
 let downPressed: boolean = false;
@@ -217,8 +218,9 @@ function updateTiles(): void {
 }
 
 function getColor(tile: tile): string {
-  if (!tile.isDiscovered) return isNotDiscoveredColor;
   if (tile.isPlayerOnField) return isPlayerOnFieldColor;
+  if (tile.tileType === tileType.Door && doorDiscovered) return doorColor;
+  if (!tile.isDiscovered) return isNotDiscoveredColor;
   if (tile.tileType === tileType.Monster) return monsterColor;
   if (tile.tileType === tileType.TreasureChest) return treasureChestColor;
   if (tile.tileType === tileType.Rock) return rockColor;
@@ -259,6 +261,7 @@ async function update() {
     isSwordFound = false;
     monsterKilled = false;
     doorOpened = false;
+    doorDiscovered = false;
     highScore = 0;
     tiles = JSON.parse(JSON.stringify(startTiles));
     updateTiles();
@@ -272,7 +275,10 @@ async function update() {
     await waitForAnyKey();
   }
   underBoardText = "Din highscore er: " + highScore;
-  const arrowUpPosition: number[] = [playerPosition[0], playerPosition[1] - 1];
+  const arrowUpPosition: number[] = [
+    playerPosition[0], 
+    playerPosition[1] - 1
+  ];
   const arrowDownPosition: number[] = [
     playerPosition[0],
     playerPosition[1] + 1,
@@ -292,26 +298,32 @@ async function update() {
     playerPosition = arrowUpPosition;
     playerMoved = true;
   }
-  if (downPressed && IsAbleToMove(arrowDownPosition, tiles, isKeyFound)) {
+  else if (downPressed && IsAbleToMove(arrowDownPosition, tiles, isKeyFound)) {
     movePlayer(tiles, playerPosition, arrowDownPosition);
     newTile = findTileFromCoordinates(tiles, arrowDownPosition);
     downPressed = false;
     playerPosition = arrowDownPosition;
     playerMoved = true;
   }
-  if (leftPressed && IsAbleToMove(arrowLeftPosition, tiles, isKeyFound)) {
+  else if (leftPressed && IsAbleToMove(arrowLeftPosition, tiles, isKeyFound)) {
     movePlayer(tiles, playerPosition, arrowLeftPosition);
     newTile = findTileFromCoordinates(tiles, arrowLeftPosition);
     leftPressed = false;
     playerPosition = arrowLeftPosition;
     playerMoved = true;
   }
-  if (rightPressed && IsAbleToMove(arrowRightPosition, tiles, isKeyFound)) {
+  else if (rightPressed && IsAbleToMove(arrowRightPosition, tiles, isKeyFound)) {
     movePlayer(tiles, playerPosition, arrowRightPosition);
     newTile = findTileFromCoordinates(tiles, arrowRightPosition);
     rightPressed = false;
     playerPosition = arrowRightPosition;
     playerMoved = true;
+  }
+  else {
+    upPressed = false;
+    downPressed = false;
+    leftPressed = false;
+    rightPressed = false;
   }
   if (playerMoved) {
     overBoardText = "---";
@@ -427,6 +439,8 @@ function IsAbleToMove(
                 textOverBoard.textContent = overBoardText;
                 textOverBoard.style.color = doorColor;
               }
+              doorDiscovered = true;
+              updateTiles();
             } else {
               isAbleToMove = true;
             }
