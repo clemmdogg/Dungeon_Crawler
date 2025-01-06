@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "es6",           // Target ECMAScript 6 or later
+      "lib": ["es6", "dom"],     // Include the ES6 and DOM libraries
+      "strict": true,            // Optional: enables strict type-checking
+      "module": "commonjs",      // Use CommonJS module system (you can use other options like "amd" or "esnext")
+      "outDir": "./"         // Optional: Output directory for the compiled JS
+    },
+    "include": [
+      "Game.ts"   // List all your TypeScript files here
+    ],
+    "exclude": []
+}
+  

@@ -3,24 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5x5 Grid</title>
+    <title>Dungeon Crawler</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
+            background-color: #E5E4E2;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #E5E4E2;
+            height: 90vh; 
         }
         canvas {
+            margin: 10px;
             border: 5px #000000;
+        }
+        #over_board {
+            font-size: 3vh;
+            font-weight: bold;
+            color: #000000;
+            margin: 3svh;
+            padding-top: 12vh;
+        }
+        #under_board {
+            margin: 1vh;
         }
     </style>
 </head>
 <body>
-    <canvas id="boardCanvas"></canvas>
-    <script src="board.js"></script>
+    <div id="over_board"></div>
+    <canvas id="boardCanvas" width="600" height="400"></canvas>
+    <div id="under_board"></div>
+    <script src="scr\Game.js"></script>
 </body>
 </html>
